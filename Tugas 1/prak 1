@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Tebak Angka 1-100'),
+        ),
+        body: InputWidget(),
+      ),
+    );
+  }
+}
+
+class InputWidget extends StatefulWidget {
+  @override
+  _InputWidgetState createState() => _InputWidgetState();
+}
+
+class _InputWidgetState extends State<InputWidget> {
+  final TextEditingController _controller = TextEditingController();
+  final int _target = Random().nextInt(100) + 1;
+  String _message = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: _controller,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Tebak angka 1-100: ',
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                int guess = int.tryParse(_controller.text) ?? 0;
+                if (guess < _target) {
+                  _message = 'Terlalu rendah, coba lagi.';
+                } else if (guess > _target) {
+                  _message = 'Terlalu tinggi, coba lagi.';
+                } else {
+                  _message = 'Selamat! Anda menebak dengan benar.';
+                }
+              });
+            },
+            child: Text('Submit'),
+          ),
+          SizedBox(height: 20),
+          Text(
+            _message,
+            style: TextStyle(fontSize: 20, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+}
